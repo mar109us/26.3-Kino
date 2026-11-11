@@ -1,6 +1,9 @@
 const model = {
    app: {},
-   viewState: {},
+   viewState: {
+      selectedShowing: undefined,
+      selectedSeats: undefined,
+   },
    data: {
       hall: { rows: "ABCDEF", seatsPerRow: 8 },
       showings: [

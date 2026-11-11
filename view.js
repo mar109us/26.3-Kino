@@ -1,5 +1,5 @@
 function updateView() {
-    document.getElementById('app').innerHTML = /*HTML*/`
+   document.getElementById("app").innerHTML = /*HTML*/ `
         <div class="page">
             <h1>Kino</h1>
             ${createShowings()}
@@ -14,46 +14,48 @@ function updateView() {
 }
 
 function createShowings() {
-    let showingsHtml = '';
-    for (let i = 0; i < model.data.showings.length; i++) {
-        const showing = model.data.showings[i];
-        showingsHtml += /*HTML*/`
-            <button class="showing">
+   let showingsHtml = "";
+   for (let i = 0; i < model.data.showings.length; i++) {
+      const showing = model.data.showings[i];
+      showingsHtml += /*HTML*/ `
+            <button class="showing" onclick="console.log('${showing.title}')">
                 <span class="showing-title">${showing.title}</span>
                 <span class="showing-time">${showing.time}</span>
             </button>
         `;
-    }
-    return /*HTML*/`
+   }
+   return /*HTML*/ `
         <div class="showings">
             ${showingsHtml}
         </div>
     `;
 }
+model.viewState.selectedShowing = { ...model.data.showings[10] };
 
 function createShowingInfo() {
-    return /*HTML*/`
+   let selectedShowing = model.viewState.selectedShowing;
+   return /*HTML*/ `
         <div class="showing-info">
-            <h2>Ingen forestilling valgt</h2>
-            <p>– · – kr per billett</p>
+            <h2>${selectedShowing.title == undefined ? "Ingen forestilling valgt" : selectedShowing.title}</h2>
+            <p>${selectedShowing.price == undefined ? "" : `${selectedShowing.price} kr per billett`}</p>
         </div>
     `;
 }
 
 function createHall() {
-    const hall = model.data.hall;
-    let hallHtml = '';
-    for (let i = 0; i < hall.rows.length; i++) {
-        const row = hall.rows[i];
-        let seatsHtml = '';
-        for (let number = 1; number <= hall.seatsPerRow; number++) {
-            seatsHtml += /*HTML*/`<button class="seat free">${number}</button>`;
-        }
-        hallHtml += /*HTML*/`
+   const hall = model.data.hall;
+   let hallHtml = "";
+   for (let i = 0; i < hall.rows.length; i++) {
+      const row = hall.rows[i];
+      let seatsHtml = "";
+      for (let number = 1; number <= hall.seatsPerRow; number++) {
+         seatsHtml += /*HTML*/ `<button class="seat free">${number}</button>`;
+      }
+      hallHtml += /*HTML*/ `
             <div class="row"><span class="row-label">${row}</span>${seatsHtml}</div>
         `;
-    }
-    return /*HTML*/`
+   }
+   return /*HTML*/ `
         <div class="screen"></div>
         <div class="screen-label">LERRET</div>
         <div class="hall">
@@ -63,7 +65,7 @@ function createHall() {
 }
 
 function createLegend() {
-    return /*HTML*/`
+   return /*HTML*/ `
         <div class="legend">
             <span><span class="seat free"></span>Ledig</span>
             <span><span class="seat selected"></span>Valgt</span>
@@ -73,7 +75,7 @@ function createLegend() {
 }
 
 function createSummary() {
-    return /*HTML*/`
+   return /*HTML*/ `
         <div class="summary">
             <span>Valgte seter: –</span>
             <span>Totalpris: – kr</span>
@@ -82,7 +84,7 @@ function createSummary() {
 }
 
 function createForm() {
-    return /*HTML*/`
+   return /*HTML*/ `
         <div class="form">
             <label>Navn
                 <input type="text">
@@ -96,7 +98,7 @@ function createForm() {
 }
 
 function createMessage() {
-    return /*HTML*/`
+   return /*HTML*/ `
         <div class="message"></div>
     `;
 }
