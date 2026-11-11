@@ -14,15 +14,25 @@ function updateView() {
 }
 
 function createShowings() {
+   let selection = model.viewState.selectedShowing;
    let showingsHtml = "";
    for (let i = 0; i < model.data.showings.length; i++) {
       const showing = model.data.showings[i];
-      showingsHtml += /*HTML*/ `
+      if (selection === undefined) {
+         showingsHtml += /*HTML*/ `
             <button class="showing" onclick="selectedShowing('${showing.id}')">
                 <span class="showing-title">${showing.title}</span>
                 <span class="showing-time">${showing.time}</span>
             </button>
         `;
+      } else {
+         showingsHtml += /*HTML*/ `
+            <button class="showing ${selection.id == showing.id ? "selected" : ""}" onclick="selectedShowing('${showing.id}')">
+                <span class="showing-title">${showing.title}</span>
+                <span class="showing-time">${showing.time}</span>
+            </button>
+        `;
+      }
    }
    return /*HTML*/ `
         <div class="showings">
@@ -32,20 +42,29 @@ function createShowings() {
 }
 
 function selectedShowing(id) {
-   console.log(id)
-   const showings = model.data.showings
+   console.log(id);
+   const showings = model.data.showings;
    for (let movie of showings) {
-      if (movie.id == id) console.log(movie.id)
+      if (movie.id == id) {
+         model.viewState.selectedShowing = { ...movie };
+      }
    }
+   updateView();
 }
-model.viewState.selectedShowing = { ...model.data.showings[10] };
 
 function createShowingInfo() {
-   let selectedShowing = model.viewState.selectedShowing;
+   const selectedShowing = model.viewState.selectedShowing;
+   if (selectedShowing === undefined) {
+      return /*HTML*/ `
+        <div class="showing-info">
+            <h2>Ingen forestilling valgt</h2>
+        </div>
+    `;
+   }
    return /*HTML*/ `
         <div class="showing-info">
-            <h2>${selectedShowing.title == undefined ? "Ingen forestilling valgt" : selectedShowing.title}</h2>
-            <p>${selectedShowing.price == undefined ? "" : `${selectedShowing.price} kr per billett`}</p>
+            <h2>${selectedShowing.title}</h2>
+            <p>${selectedShowing.price} kr per billett</p>
         </div>
     `;
 }
