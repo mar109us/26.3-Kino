@@ -18,7 +18,7 @@ function createShowings() {
    for (let i = 0; i < model.data.showings.length; i++) {
       const showing = model.data.showings[i];
       showingsHtml += /*HTML*/ `
-            <button class="showing" onclick="selectedShowing('${showing.title}', '${showing.price}')">
+            <button class="showing" onclick="selectedShowing('${showing.id}')">
                 <span class="showing-title">${showing.title}</span>
                 <span class="showing-time">${showing.time}</span>
             </button>
@@ -31,8 +31,12 @@ function createShowings() {
     `;
 }
 
-function selectedShowing(title, price) {
-   console.log(title, price);
+function selectedShowing(id) {
+   console.log(id)
+   const showings = model.data.showings
+   for (let movie of showings) {
+      if (movie.id == id) console.log(movie.id)
+   }
 }
 model.viewState.selectedShowing = { ...model.data.showings[10] };
 
