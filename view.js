@@ -76,7 +76,7 @@ function createHall() {
       const row = hall.rows[i];
       let seatsHtml = "";
       for (let number = 1; number <= hall.seatsPerRow; number++) {
-         seatsHtml += /*HTML*/ `<button class="seat ${isSeatFree(i, number) ? "free" : ""}" onclick="getSeat('${i}${number}')">${number}</button>`;
+         seatsHtml += /*HTML*/ `<button class="seat ${isSeatFree(`${i}-${number}`) ? "free" : ""}" onclick="getSeat('${i}-${number}')">${number}</button>`;
       }
       hallHtml += /*HTML*/ `
             <div class="row"><span class="row-label">${row}</span>${seatsHtml}</div>
@@ -92,15 +92,23 @@ function createHall() {
 }
 
 function getSeat(a) {
-   console.log(a);
-   model.viewState.selectedSeats.push(a);
-   updateSeats();
+   if (model.viewState.selectedSeats.includes(a)) {
+      console.log("double");
+   } else model.viewState.selectedSeats.push(a);
+
+   console.table(model.viewState.selectedSeats);
+
+   updateView();
 }
 
 function updateSeats() {}
 
-function isSeatFree(a,b) {
-console.log(a,b)
+function isSeatFree(seat) {
+   for (let storedSeats of model.viewState.selectedSeats) {
+      if (storedSeats === seat) {
+         return true;
+      }
+   }
 }
 
 function createLegend() {
