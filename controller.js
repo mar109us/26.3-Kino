@@ -12,10 +12,23 @@ function reserve() {
    else if (phone === "") model.viewState.message = "Telefonnummer mangler";
    else if (!isValidPhone(phone)) model.viewState.message = "Telefonnummeret er ikke gyldig";
    else {
-      model.viewState.message = `Din reservasjon er fullført, bekreftelse blir sendt til ${phone}`;
+      model.data.reservations.push({
+         showingId: selectedShowingId,
+         name: name,
+         phone: phone,
+         seats: selectedSeats,
+      });
+      clearViewState();
+      model.viewState.message = `Reservasjon fullført`;
    }
-   
    updateView();
+}
+
+function clearViewState() {
+   model.viewState.message = "";
+   model.viewState.inputName = "";
+   model.viewState.inputPhone = "";
+   model.viewState.selectedSeats = [];
 }
 
 function isValidName(name) {
@@ -62,7 +75,7 @@ function toggleSeat(clickedSeat) {
       updateView();
       return;
    } else seats.push(clickedSeat);
-
+   model.viewState.message = "";
    console.table(seats);
 
    updateView();
