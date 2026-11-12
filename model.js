@@ -4,6 +4,8 @@ const model = {
    },
    viewState: {
       message: "",
+      inputName: "",
+      inputPhone: "",
       selectedShowing: undefined,
       selectedSeats: [],
       totalPrice: 0,

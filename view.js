@@ -160,10 +160,10 @@ function createForm() {
    return /*HTML*/ `
         <form class="form" onsubmit="reserveSeats(event)">
             <label for="name">Navn</label>
-            <input id="name" name="name" type="text">
+            <input id="name" name="name" type="text" value="${model.viewState.inputName}" onchange="model.viewState.inputName = this.value">
                <br>
             <label for="phone">Telefonnummer</label>
-            <input id="phone" name="phone" type="number">
+            <input id="phone" name="phone" type="number" value="${model.viewState.inputPhone}" onchange="model.viewState.inputPhone = this.value">
                <br>
             <button class="reserve" type="submit">Reserver</button>
         </form>
@@ -171,7 +171,7 @@ function createForm() {
 }
 
 function createMessage() {
-   const message = model.viewState.message
+   const message = model.viewState.message;
    return /*HTML*/ `
         <div id="message" class="message">${message}</div>
     `;
