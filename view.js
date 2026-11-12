@@ -56,17 +56,15 @@ function createShowingInfo() {
    const selectedShowing = model.viewState.selectedShowing;
    if (selectedShowing === undefined) {
       return /*HTML*/ `
-        <div class="showing-info">
+         <div class="showing-info">
             <h2>Ingen forestilling valgt</h2>
-        </div>
-    `;
+         </div>`;
    }
    return /*HTML*/ `
         <div class="showing-info">
             <h2>${selectedShowing.title}</h2>
             <p>${selectedShowing.price} kr per billett</p>
-        </div>
-    `;
+        </div>`;
 }
 
 function createHall() {
@@ -76,7 +74,13 @@ function createHall() {
       const row = hall.rows[i];
       let seatsHtml = "";
       for (let number = 1; number <= hall.seatsPerRow; number++) {
-         seatsHtml += /*HTML*/ `<button class="seat ${isSeatFree(`${i}-${number}`) ? "free" : ""}" onclick="getSeat('${i}-${number}')">${number}</button>`;
+         let currentSeat = `${i}-${number}`;
+         seatsHtml += /*HTML*/ `
+         <button 
+            onclick="getSeat('${currentSeat}')"
+            class="seat ${getSeatStatus(`${currentSeat}`)}">
+               ${number}
+         </button>`;
       }
       hallHtml += /*HTML*/ `
             <div class="row"><span class="row-label">${row}</span>${seatsHtml}</div>
@@ -97,6 +101,9 @@ function getSeat(clickedSeat) {
    if (seats.includes(clickedSeat)) {
       if (index < 0) return;
       seats.splice(index, 1);
+   } else if (seats.length > model.app.maxSeatSelection - 1) {
+      console.log("max seat is: ", model.app.maxSeatSelection);
+      return;
    } else seats.push(clickedSeat);
 
    console.table(seats);
@@ -104,12 +111,11 @@ function getSeat(clickedSeat) {
    updateView();
 }
 
-function updateSeats() {}
-
-function isSeatFree(seat) {
+function getSeatStatus(seat) {
    for (let storedSeats of model.viewState.selectedSeats) {
       if (storedSeats === seat) {
-         return true;
+         console.log(storedSeats);
+         return "selected";
       }
    }
 }
