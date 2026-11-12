@@ -1,11 +1,19 @@
-function getSeatsStatus() {
-   const hall = model.data.hall;
-
-   for (let i = 0; i < hall.rows.length; i++) {
-      const row = hall.rows[i];
-      for (let number = 1; number <= hall.seatsPerRow; number++) {
-
-      }
-            row
+function addRandomTakenSeats() {
+   for (let showing of model.data.showings) {
+      showing.takenSeats = randomSeat()
    }
+}
+addRandomTakenSeats()
+
+function randomSeat() {
+   const seats = [];
+   while (seats.length < 10) {
+      const row = Math.floor(Math.random() * 6);
+      const column = Math.floor(Math.random() * 6) + 1;
+      const seat = `${row}-${column}`;
+      if (!seats.includes(seat)) {
+         seats.push(seat);
+      }
+   }
+   return seats;
 }

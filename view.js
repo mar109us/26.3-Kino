@@ -42,6 +42,7 @@ function createShowings() {
 }
 
 function selectedShowing(id) {
+   model.viewState.selectedSeats = []
    const showings = model.data.showings;
    for (let movie of showings) {
       if (movie.id == id) {
@@ -96,8 +97,19 @@ function createHall() {
 }
 
 function getSeat(clickedSeat) {
+   const showing = model.viewState.selectedShowing;
+   if (showing === undefined) {
+      console.log("choose a showing before picking seats");
+      return;
+   }
+   if (showing.takenSeats.includes(clickedSeat)) {
+      console.log("seat is already taken: ", clickedSeat);
+      return;
+   }
+
    const index = model.viewState.selectedSeats.indexOf(clickedSeat);
    const seats = model.viewState.selectedSeats;
+
    if (seats.includes(clickedSeat)) {
       if (index < 0) return;
       seats.splice(index, 1);
@@ -112,12 +124,12 @@ function getSeat(clickedSeat) {
 }
 
 function getSeatStatus(seat) {
-   for (let storedSeats of model.viewState.selectedSeats) {
-      if (storedSeats === seat) {
-         console.log(storedSeats);
-         return "selected";
-      }
-   }
+   const showing = model.viewState.selectedShowing;
+   if (showing === undefined) return "taken";
+
+   if (showing.takenSeats.includes(seat)) return "taken";
+   if (model.viewState.selectedSeats.includes(seat)) return "selected";
+   return "free";
 }
 
 function createLegend() {
@@ -131,10 +143,15 @@ function createLegend() {
 }
 
 function createSummary() {
+   const selectedSeatsAmount = model.viewState.selectedSeats.length
+   let moviePrice = undefined
+   if (model.viewState.selectedShowing) {
+      moviePrice = model.viewState.selectedShowing.price
+   }
    return /*HTML*/ `
         <div class="summary">
-            <span>Valgte seter: –</span>
-            <span>Totalpris: – kr</span>
+            <span>Valgte seter: ${selectedSeatsAmount}</span>
+            <span>Totalpris: ${moviePrice * selectedSeatsAmount}</span>
         </div>
     `;
 }
@@ -148,7 +165,7 @@ function createForm() {
             <label>Telefonnummer
                 <input type="text">
             </label>
-            <button class="reserve">Reserver</button>
+            <button class="reserve" onclick="reserveSeats()">Reserver</button>
         </div>
     `;
 }
