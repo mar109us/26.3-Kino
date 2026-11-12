@@ -38,7 +38,7 @@ function reserve(event) {
 }
 
 function isValidName(name) {
-   if (name.length < 2) return false;
+   if (name.length === 0) return false;
    const allowedCharacters = "abcdefghijklmnopqrstuvwxyzæøå -";
    for (const character of name.toLowerCase()) {
       if (!allowedCharacters.includes(character)) return false;
@@ -53,4 +53,42 @@ function isValidPhone(phone) {
       if (!numbers.includes(character)) return false;
    }
    return true;
+}
+
+function selectShowing(id) {
+   model.viewState.selectedSeats = [];
+   model.viewState.message = "";
+   const showings = model.data.showings;
+   for (let movie of showings) {
+      if (movie.id == id) {
+         model.viewState.selectedShowing = { ...movie };
+         console.table(movie);
+      }
+   }
+   updateView();
+}
+
+function toggleSeat(clickedSeat) {
+   const showing = model.viewState.selectedShowing;
+   if (showing === undefined) {
+      model.viewState.message = "Velg en forestilling før du velger seter";
+      updateView();
+      return;
+   }
+   if (showing.takenSeats.includes(clickedSeat)) return;
+   const index = model.viewState.selectedSeats.indexOf(clickedSeat);
+   const seats = model.viewState.selectedSeats;
+
+   if (seats.includes(clickedSeat)) {
+      if (index < 0) return;
+      seats.splice(index, 1);
+   } else if (seats.length > model.app.maxSeatSelection - 1) {
+      model.viewState.message = `Du kan maks velge ${model.app.maxSeatSelection} seter`;
+      updateView();
+      return;
+   } else seats.push(clickedSeat);
+
+   console.table(seats);
+
+   updateView();
 }

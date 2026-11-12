@@ -20,14 +20,14 @@ function createShowings() {
       const showing = model.data.showings[i];
       if (selection === undefined) {
          showingsHtml += /*HTML*/ `
-            <button class="showing" onclick="selectedShowing('${showing.id}')">
+            <button class="showing" onclick="selectShowing('${showing.id}')">
                 <span class="showing-title">${showing.title}</span>
                 <span class="showing-time">${showing.time}</span>
             </button>
         `;
       } else {
          showingsHtml += /*HTML*/ `
-            <button class="showing ${selection.id == showing.id ? "selected" : ""}" onclick="selectedShowing('${showing.id}')">
+            <button class="showing ${selection.id == showing.id ? "selected" : ""}" onclick="selectShowing('${showing.id}')">
                 <span class="showing-title">${showing.title}</span>
                 <span class="showing-time">${showing.time}</span>
             </button>
@@ -39,18 +39,6 @@ function createShowings() {
             ${showingsHtml}
         </div>
     `;
-}
-
-function selectedShowing(id) {
-   model.viewState.selectedSeats = [];
-   const showings = model.data.showings;
-   for (let movie of showings) {
-      if (movie.id == id) {
-         model.viewState.selectedShowing = { ...movie };
-         console.table(movie);
-      }
-   }
-   updateView();
 }
 
 function createShowingInfo() {
@@ -78,7 +66,7 @@ function createHall() {
          let currentSeat = `${i}-${number}`;
          seatsHtml += /*HTML*/ `
          <button 
-            onclick="getSeat('${currentSeat}')"
+            onclick="toggleSeat('${currentSeat}')"
             class="seat ${getSeatStatus(`${currentSeat}`)}">
                ${number}
          </button>`;
@@ -94,33 +82,6 @@ function createHall() {
             ${hallHtml}
         </div>
     `;
-}
-
-function getSeat(clickedSeat) {
-   const showing = model.viewState.selectedShowing;
-   if (showing === undefined) {
-      console.log("choose a showing before picking seats");
-      return;
-   }
-   if (showing.takenSeats.includes(clickedSeat)) {
-      console.log("seat is already taken: ", clickedSeat);
-      return;
-   }
-
-   const index = model.viewState.selectedSeats.indexOf(clickedSeat);
-   const seats = model.viewState.selectedSeats;
-
-   if (seats.includes(clickedSeat)) {
-      if (index < 0) return;
-      seats.splice(index, 1);
-   } else if (seats.length > model.app.maxSeatSelection - 1) {
-      console.log("max seat is: ", model.app.maxSeatSelection);
-      return;
-   } else seats.push(clickedSeat);
-
-   console.table(seats);
-
-   updateView();
 }
 
 function getSeatStatus(seat) {
