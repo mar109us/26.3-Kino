@@ -24,9 +24,12 @@ function reserveSeats(event) {
    const name = form.name.value;
    const phone = form.phone.value;
    console.log(name, phone);
-
-   if (name === "") model.viewState.message = "Navn mangler";
+   const selectedShowing = model.viewState.selectedShowing;
+   const selectedSeats = model.viewState.selectedSeats;
+   if (!selectedShowing) model.viewState.message = "Ingen film valgt";
+   else if (selectedSeats.length === 0) model.viewState.message = "Ingen seter valgt";
+   else if (name === "") model.viewState.message = "Navn mangler";
    else if (phone === "") model.viewState.message = "Telefonnummer mangler";
    createMessage();
-   updateView()
+   updateView();
 }
