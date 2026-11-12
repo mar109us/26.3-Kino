@@ -42,11 +42,11 @@ function createShowings() {
 }
 
 function selectedShowing(id) {
-   console.log(id);
    const showings = model.data.showings;
    for (let movie of showings) {
       if (movie.id == id) {
          model.viewState.selectedShowing = { ...movie };
+         console.table(movie)
       }
    }
    updateView();
@@ -76,7 +76,7 @@ function createHall() {
       const row = hall.rows[i];
       let seatsHtml = "";
       for (let number = 1; number <= hall.seatsPerRow; number++) {
-         seatsHtml += /*HTML*/ `<button class="seat free">${number}</button>`;
+         seatsHtml += /*HTML*/ `<button class="seat free" onclick="getSeat(${i}, ${number})">${number}</button>`;
       }
       hallHtml += /*HTML*/ `
             <div class="row"><span class="row-label">${row}</span>${seatsHtml}</div>
@@ -89,6 +89,10 @@ function createHall() {
             ${hallHtml}
         </div>
     `;
+}
+
+function getSeat(a,b) {
+console.log(a,b)
 }
 
 function createLegend() {
