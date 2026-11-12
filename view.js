@@ -46,7 +46,7 @@ function selectedShowing(id) {
    for (let movie of showings) {
       if (movie.id == id) {
          model.viewState.selectedShowing = { ...movie };
-         console.table(movie)
+         console.table(movie);
       }
    }
    updateView();
@@ -76,7 +76,7 @@ function createHall() {
       const row = hall.rows[i];
       let seatsHtml = "";
       for (let number = 1; number <= hall.seatsPerRow; number++) {
-         seatsHtml += /*HTML*/ `<button class="seat free" onclick="getSeat(${i}, ${number})">${number}</button>`;
+         seatsHtml += /*HTML*/ `<button class="seat ${isSeatFree(i, number) ? "free" : ""}" onclick="getSeat('${i}${number}')">${number}</button>`;
       }
       hallHtml += /*HTML*/ `
             <div class="row"><span class="row-label">${row}</span>${seatsHtml}</div>
@@ -91,7 +91,15 @@ function createHall() {
     `;
 }
 
-function getSeat(a,b) {
+function getSeat(a) {
+   console.log(a);
+   model.viewState.selectedSeats.push(a);
+   updateSeats();
+}
+
+function updateSeats() {}
+
+function isSeatFree(a,b) {
 console.log(a,b)
 }
 
