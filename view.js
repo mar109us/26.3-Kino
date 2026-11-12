@@ -91,12 +91,15 @@ function createHall() {
     `;
 }
 
-function getSeat(a) {
-   if (model.viewState.selectedSeats.includes(a)) {
-      console.log("double");
-   } else model.viewState.selectedSeats.push(a);
+function getSeat(clickedSeat) {
+   const index = model.viewState.selectedSeats.indexOf(clickedSeat);
+   const seats = model.viewState.selectedSeats;
+   if (seats.includes(clickedSeat)) {
+      if (index < 0) return;
+      seats.splice(index, 1);
+   } else seats.push(clickedSeat);
 
-   console.table(model.viewState.selectedSeats);
+   console.table(seats);
 
    updateView();
 }
