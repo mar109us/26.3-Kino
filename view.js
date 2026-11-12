@@ -158,20 +158,20 @@ function createSummary() {
 
 function createForm() {
    return /*HTML*/ `
-      <form class="form" onsubmit="reserveSeats(event)">
+      <form class="form" onsubmit="reserve(event)">
          <label for="name">Navn</label>
          <input 
             id="name" 
             type="text" 
             value="${model.viewState.inputName}" 
-            onchange="model.viewState.inputName = this.value">
+            oninput="model.viewState.inputName = this.value">
          <br>
          <label for="phone">Telefonnummer</label>
          <input 
             id="phone" 
-            type="number" 
-            value="${model.viewState.inputPhone}" 
-            onchange="model.viewState.inputPhone = this.value">
+            type="tel"
+            value="${model.viewState.inputPhone}"
+            oninput="model.viewState.inputPhone = this.value">
          <br>
          <button class="reserve" type="submit">Reserver</button>
       </form>`;
