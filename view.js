@@ -14,25 +14,15 @@ function updateView() {
 }
 
 function createShowings() {
-   let selection = model.viewState.selectedShowing;
    let showingsHtml = "";
-   for (let i = 0; i < model.data.showings.length; i++) {
-      const showing = model.data.showings[i];
-      if (selection === undefined) {
-         showingsHtml += /*HTML*/ `
-            <button class="showing" onclick="selectShowing('${showing.id}')">
+   for (const showing of model.data.showings) {
+      const isSelected = showing.id === model.viewState.selectedShowingId;
+      showingsHtml += /*HTML*/ `
+            <button class="showing ${isSelected ? "selected" : ""}" onclick="selectShowing(${showing.id})">
                 <span class="showing-title">${showing.title}</span>
                 <span class="showing-time">${showing.time}</span>
             </button>
         `;
-      } else {
-         showingsHtml += /*HTML*/ `
-            <button class="showing ${selection.id == showing.id ? "selected" : ""}" onclick="selectShowing('${showing.id}')">
-                <span class="showing-title">${showing.title}</span>
-                <span class="showing-time">${showing.time}</span>
-            </button>
-        `;
-      }
    }
    return /*HTML*/ `
         <div class="showings">
@@ -42,7 +32,7 @@ function createShowings() {
 }
 
 function createShowingInfo() {
-   const selectedShowing = model.viewState.selectedShowing;
+   const selectedShowing = getSelectedShowing();
    if (selectedShowing === undefined) {
       return /*HTML*/ `
          <div class="showing-info">
@@ -63,11 +53,11 @@ function createHall() {
       const row = hall.rows[i];
       let seatsHtml = "";
       for (let number = 1; number <= hall.seatsPerRow; number++) {
-         let currentSeat = `${i}-${number}`;
+         const currentSeat = `${row}${number}`;
          seatsHtml += /*HTML*/ `
          <button 
             onclick="toggleSeat('${currentSeat}')"
-            class="seat ${getSeatStatus(`${currentSeat}`)}">
+            class="seat ${getSeatStatus(currentSeat)}">
                ${number}
          </button>`;
       }
@@ -85,10 +75,10 @@ function createHall() {
 }
 
 function getSeatStatus(seat) {
-   const showing = model.viewState.selectedShowing;
-   if (showing === undefined) return "taken";
+   const showingId = model.viewState.selectedShowingId;
+   if (showingId === undefined) return "taken";
 
-   if (showing.takenSeats.includes(seat)) return "taken";
+   if (getTakenSeats(showingId).includes(seat)) return "taken";
    if (model.viewState.selectedSeats.includes(seat)) return "selected";
    return "free";
 }
@@ -106,8 +96,9 @@ function createLegend() {
 function createSummary() {
    const selectedSeatsAmount = model.viewState.selectedSeats.length;
    let moviePrice = 0;
-   if (model.viewState.selectedShowing) {
-      moviePrice = model.viewState.selectedShowing.price;
+   const selectedShowing = getSelectedShowing();
+   if (selectedShowing !== undefined) {
+      moviePrice = selectedShowing.price;
    }
    return /*HTML*/ `
         <div class="summary">
@@ -119,7 +110,7 @@ function createSummary() {
 
 function createForm() {
    return /*HTML*/ `
-      <form class="form" onsubmit="reserve(event)">
+      <form class="form" onsubmit="event.preventDefault(); reserve()">
          <label for="name">Navn</label>
          <input 
             id="name" 
