@@ -3,8 +3,10 @@ const model = {
       maxSeatSelection: 6,
    },
    viewState: {
+      message: "",
       selectedShowing: undefined,
       selectedSeats: [],
+      totalPrice: 0,
    },
    data: {
       hall: { rows: "ABCDEF", seatsPerRow: 8 },

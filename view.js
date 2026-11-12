@@ -42,7 +42,7 @@ function createShowings() {
 }
 
 function selectedShowing(id) {
-   model.viewState.selectedSeats = []
+   model.viewState.selectedSeats = [];
    const showings = model.data.showings;
    for (let movie of showings) {
       if (movie.id == id) {
@@ -143,10 +143,10 @@ function createLegend() {
 }
 
 function createSummary() {
-   const selectedSeatsAmount = model.viewState.selectedSeats.length
-   let moviePrice = undefined
+   const selectedSeatsAmount = model.viewState.selectedSeats.length;
+   let moviePrice = 0;
    if (model.viewState.selectedShowing) {
-      moviePrice = model.viewState.selectedShowing.price
+      moviePrice = model.viewState.selectedShowing.price;
    }
    return /*HTML*/ `
         <div class="summary">
@@ -158,20 +158,21 @@ function createSummary() {
 
 function createForm() {
    return /*HTML*/ `
-        <div class="form">
-            <label>Navn
-                <input type="text">
-            </label>
-            <label>Telefonnummer
-                <input type="text">
-            </label>
-            <button class="reserve" onclick="reserveSeats()">Reserver</button>
-        </div>
+        <form class="form" onsubmit="reserveSeats(event)">
+            <label for="name">Navn</label>
+            <input id="name" name="name" type="text">
+               <br>
+            <label for="phone">Telefonnummer</label>
+            <input id="phone" name="phone" type="number">
+               <br>
+            <button class="reserve" type="submit">Reserver</button>
+        </form>
     `;
 }
 
 function createMessage() {
+   const message = model.viewState.message
    return /*HTML*/ `
-        <div class="message"></div>
+        <div id="message" class="message">${message}</div>
     `;
 }
