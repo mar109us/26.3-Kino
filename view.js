@@ -87,9 +87,9 @@ function getSeatStatus(seat) {
 function createLegend() {
    return /*HTML*/ `
         <div class="legend">
-            <span><span class="seat free"></span>Ledig</span>
-            <span><span class="seat selected"></span>Valgt</span>
-            <span><span class="seat taken"></span>Opptatt</span>
+            <span class="seat free"></span><span>Ledig</span>
+            <span class="seat selected"></span><span>Valgt</span>
+            <span class="seat taken"></span><span>Opptatt</span>
         </div>
     `;
 }
@@ -104,7 +104,7 @@ function createSummary() {
    return /*HTML*/ `
         <div class="summary">
             <span>Valgte seter: ${selectedSeatsAmount}</span>
-            <span>Totalpris: ${moviePrice * selectedSeatsAmount}</span>
+            <span>Totalpris: ${moviePrice * selectedSeatsAmount} kr</span>
         </div>
     `;
 }
