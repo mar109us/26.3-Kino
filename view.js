@@ -42,6 +42,7 @@ function createShowingInfo() {
    return /*HTML*/ `
         <div class="showing-info">
             <h2>${selectedShowing.title}</h2>
+            <p>${selectedShowing.time}</p>
             <p>${selectedShowing.price} kr per billett</p>
         </div>`;
 }
