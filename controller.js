@@ -63,7 +63,11 @@ function toggleSeat(clickedSeat) {
       updateView();
       return;
    }
-   if (getTakenSeats(showingId).includes(clickedSeat)) return;
+   if (getTakenSeats(showingId).includes(clickedSeat)) {
+      model.viewState.message = "Valgt sete er allerede reservert";
+      updateView();
+      return;
+   }
    const index = model.viewState.selectedSeats.indexOf(clickedSeat);
    const seats = model.viewState.selectedSeats;
 
