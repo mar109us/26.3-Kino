@@ -9,26 +9,24 @@ function updateView() {
             ${createSummary()}
             ${createForm()}
             ${createMessage()}
-        </div>
-    `;
+        </div>`;
 }
 
 function createShowings() {
    let showingsHtml = "";
    for (const showing of model.data.showings) {
-      const isSelected = showing.id === model.viewState.selectedShowingId;
+      let isSelected = false;
+      if (showing.id === model.viewState.selectedShowingId) isSelected = true;
       showingsHtml += /*HTML*/ `
-            <button class="showing ${isSelected ? "selected" : ""}" onclick="selectShowing(${showing.id})">
-                <span class="showing-title">${showing.title}</span>
-                <span class="showing-time">${showing.time}</span>
-            </button>
-        `;
+         <button class="showing ${isSelected ? "selected" : ""}" onclick="selectShowing(${showing.id})">
+               <span class="showing-title">${showing.title}</span>
+               <span class="showing-time">${showing.time}</span>
+         </button>`;
    }
    return /*HTML*/ `
         <div class="showings">
             ${showingsHtml}
-        </div>
-    `;
+        </div>`;
 }
 
 function createShowingInfo() {
@@ -40,11 +38,11 @@ function createShowingInfo() {
          </div>`;
    }
    return /*HTML*/ `
-        <div class="showing-info">
-            <h2>${selectedShowing.title}</h2>
-            <p>${selectedShowing.time}</p>
-            <p>${selectedShowing.price} kr per billett</p>
-        </div>`;
+      <div class="showing-info">
+         <h2>${selectedShowing.title}</h2>
+         <p>${selectedShowing.time}</p>
+         <p>${selectedShowing.price} kr per billett</p>
+      </div>`;
 }
 
 function createHall() {
@@ -56,29 +54,26 @@ function createHall() {
       for (let number = 1; number <= hall.seatsPerRow; number++) {
          const currentSeat = `${row}${number}`;
          seatsHtml += /*HTML*/ `
-         <button 
+            <button 
             onclick="toggleSeat('${currentSeat}')"
             class="seat ${getSeatStatus(currentSeat)}">
-               ${number}
-         </button>`;
+            ${number}
+            </button>`;
       }
       hallHtml += /*HTML*/ `
-            <div class="row"><span class="row-label">${row}</span>${seatsHtml}</div>
-        `;
+         <div class="row"><span class="row-label">${row}</span>${seatsHtml}</div>`;
    }
    return /*HTML*/ `
         <div class="screen"></div>
         <div class="screen-label">LERRET</div>
         <div class="hall">
             ${hallHtml}
-        </div>
-    `;
+        </div>`;
 }
 
 function getSeatStatus(seat) {
    const showingId = model.viewState.selectedShowingId;
    if (showingId === undefined) return "taken";
-
    if (getTakenSeats(showingId).includes(seat)) return "taken";
    if (model.viewState.selectedSeats.includes(seat)) return "selected";
    return "free";
@@ -86,12 +81,11 @@ function getSeatStatus(seat) {
 
 function createLegend() {
    return /*HTML*/ `
-        <div class="legend">
-            <span class="seat free"></span><span>Ledig</span>
-            <span class="seat selected"></span><span>Valgt</span>
-            <span class="seat taken"></span><span>Opptatt</span>
-        </div>
-    `;
+      <div class="legend">
+         <span class="seat free"></span><span>Ledig</span>
+         <span class="seat selected"></span><span>Valgt</span>
+         <span class="seat taken"></span><span>Opptatt</span>
+      </div>`;
 }
 
 function createSummary() {
@@ -102,11 +96,17 @@ function createSummary() {
       moviePrice = selectedShowing.price;
    }
    return /*HTML*/ `
-        <div class="summary">
-            <span>Valgte seter: ${selectedSeatsAmount}</span>
-            <span>Totalpris: ${moviePrice * selectedSeatsAmount} kr</span>
-        </div>
-    `;
+      <div class="summary">
+         <span>Valgte seter: ${selectedSeatsAmount}</span>
+         <span>Totalpris: ${moviePrice * selectedSeatsAmount} kr</span>
+      </div>`;
+}
+
+function getSelectedShowing() {
+   for (const showing of model.data.showings) {
+      if (showing.id === model.viewState.selectedShowingId) return showing;
+   }
+   return undefined;
 }
 
 function createForm() {
@@ -132,6 +132,5 @@ function createForm() {
 
 function createMessage() {
    return /*HTML*/ `
-        <div id="message" class="message">${model.viewState.message}</div>
-    `;
+      <div id="message" class="message">${model.viewState.message}</div>`;
 }

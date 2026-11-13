@@ -1,25 +1,39 @@
 function reserve() {
-   const name = model.viewState.inputName.trim();
-   const phone = model.viewState.inputPhone.trim();
-   console.log(name, phone);
-   const selectedShowingId = model.viewState.selectedShowingId;
-   const selectedSeats = model.viewState.selectedSeats;
-   if (selectedShowingId === undefined) model.viewState.message = "Ingen film valgt";
-   else if (selectedSeats.length === 0) model.viewState.message = "Ingen seter valgt";
-   else if (name === "") model.viewState.message = "Navn mangler";
-   else if (phone === "") model.viewState.message = "Telefonnummer mangler";
-   else if (!isValidPhone(phone)) model.viewState.message = "Telefonnummeret er ikke gyldig";
-   else {
-      model.data.reservations.push({
-         showingId: selectedShowingId,
-         name: name,
-         phone: phone,
-         seats: [...selectedSeats],
-      });
-      clearViewState();
-      model.viewState.message = `Reservasjon fullført`;
+   const reservationData = {
+      id: model.viewState.selectedShowingId,
+      name: model.viewState.inputName.trim(),
+      phone: model.viewState.inputPhone.trim(),
+      seats: model.viewState.selectedSeats,
+   };
+
+   const errorMessage = getReservationError(reservationData);
+   if (errorMessage !== null) {
+      model.viewState.message = errorMessage;
+      updateView();
+      return;
    }
+   saveNewReservation(reservationData);
+   clearViewState();
+   model.viewState.message = "Reservasjon fullført";
    updateView();
+}
+
+function getReservationError(data) {
+   if (data.id === undefined) return "Ingen film valgt";
+   if (data.seats.length === 0) return "Ingen seter valgt";
+   if (data.name === "") return "Navn mangler";
+   if (data.phone === "") return "Telefonnummer mangler";
+   if (!isValidPhone(data.phone)) return "Telefonnummeret er ikke gyldig, 8 siffer nødvendig";
+   return null;
+}
+
+function saveNewReservation(data) {
+   model.data.reservations.push({
+      showingId: data.id,
+      name: data.name,
+      phone: data.phone,
+      seats: [...data.seats],
+   });
 }
 
 function clearViewState() {
@@ -42,34 +56,30 @@ function selectShowing(id) {
    model.viewState.selectedShowingId = id;
    model.viewState.selectedSeats = [];
    model.viewState.message = "";
-   console.log("selected showing:", id);
    updateView();
 }
 
 function toggleSeat(clickedSeat) {
    const showingId = model.viewState.selectedShowingId;
-   if (showingId === undefined) {
-      model.viewState.message = "Velg en forestilling før du velger seter";
-      updateView();
-      return;
-   }
-   if (getTakenSeats(showingId).includes(clickedSeat)) {
-      model.viewState.message = "Valgt sete er allerede reservert";
-      updateView();
-      return;
-   }
-   const index = model.viewState.selectedSeats.indexOf(clickedSeat);
    const seats = model.viewState.selectedSeats;
 
-   if (seats.includes(clickedSeat)) {
-      seats.splice(index, 1);
-   } else if (seats.length > model.app.maxSeatSelection - 1) {
-      model.viewState.message = `Du kan maks velge ${model.app.maxSeatSelection} seter`;
+   const errorMessage = getSeatError(showingId, seats, clickedSeat);
+   if (errorMessage !== null) {
+      model.viewState.message = errorMessage;
       updateView();
       return;
-   } else seats.push(clickedSeat);
+   }
+   if (seats.includes(clickedSeat)) seats.splice(seats.indexOf(clickedSeat), 1);
+   else seats.push(clickedSeat);
    model.viewState.message = "";
-   console.table(seats);
-
    updateView();
+}
+
+function getSeatError(showingId, seats, clickedSeat) {
+   if (showingId === undefined) return "Velg en forestilling før du velger seter";
+   if (getTakenSeats(showingId).includes(clickedSeat)) return "Valgt sete er allerede reservert";
+   if (seats.includes(clickedSeat)) return null;
+   if (seats.length >= model.app.maxSeatSelection)
+      return `Du kan maks velge ${model.app.maxSeatSelection} seter`;
+   else return null;
 }
