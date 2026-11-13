@@ -1,0 +1,318 @@
+:root {
+    --surface: #e6dccd;
+    --shadow-dark: #c2b5a3;
+    --shadow-light: #fbf5ec;
+    --text: #3e3328;
+    --text-soft: #75685a;
+    --accent: #5f6f3a;
+    --accent-hover: #4e5c2f;
+    --error: #a4452c;
+    --selected: #e6d08e;
+    --page-gradient: linear-gradient(145deg, #f4ede3, var(--surface) 50%, #d5c8b5);
+
+    --shadow-out: 6px 6px 12px var(--shadow-dark),
+        -6px -6px 12px var(--shadow-light);
+    --shadow-out-small: 3px 3px 6px var(--shadow-dark),
+        -3px -3px 6px var(--shadow-light);
+    --shadow-in: inset 3px 3px 6px var(--shadow-dark),
+        inset -3px -3px 6px var(--shadow-light);
+}
+
+body {
+    font-family: "Nunito", sans-serif;
+    font-size: 1.125rem;
+    color: var(--text);
+    margin: 0;
+    padding: 2rem 1rem;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: var(--page-gradient);
+}
+
+.page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 3rem 3rem;
+}
+
+h1 {
+    margin: 0 0 1.9rem;
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
+
+/* Forestillinger */
+.showings {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 2.25rem;
+}
+
+.showing {
+    flex: 1 1 140px;
+    padding: 0.7rem 0.9rem;
+    border: none;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--text);
+    box-shadow: var(--shadow-out-small);
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+}
+
+.showing:active,
+.showing.selected {
+    box-shadow: var(--shadow-in);
+}
+
+.showing:not(.selected):hover {
+    box-shadow: var(--shadow-out);
+}
+
+.showing-title {
+    display: block;
+    font-weight: bold;
+}
+
+.showing-time {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--text-soft);
+}
+
+/* Valgt forestilling */
+.showing-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 2rem;
+    margin-bottom: 1.9rem;
+}
+
+.showing-info h2 {
+    margin: 0;
+}
+
+.showing-details {
+    text-align: right;
+}
+
+.showing-details p {
+    margin: 0.2rem 0 0;
+    color: var(--text-soft);
+}
+
+/* Salen */
+.screen {
+   margin-bottom: 1.9rem;
+   padding: 0.3rem 0;
+   border-radius: 12px;
+   box-shadow: var(--shadow-in);
+   text-align: center;
+   font-size: 0.9rem;
+   letter-spacing: 3px;
+   color: var(--text-soft);
+   padding-top: 15px;
+   padding-bottom: 15px;
+}
+
+.hall {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.row-label {
+    width: 1.5rem;
+    text-align: right;
+    margin-right: 8px;
+    font-weight: bold;
+    color: var(--text-soft);
+}
+
+.seat {
+    width: 42px;
+    height: 46px;
+    border: none;
+    border-radius: 18px 18px 4px 4px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.seat.free {
+    box-shadow: var(--shadow-out-small);
+}
+
+.row .seat.free:hover {
+    color: var(--accent);
+    box-shadow: var(--shadow-out);
+}
+
+.seat.free:active,
+.seat.selected {
+    box-shadow: var(--shadow-in);
+}
+
+.seat.taken {
+    background: rgba(62, 51, 40, 0.06);
+    color: transparent;
+    box-shadow: var(--shadow-in);
+    cursor: not-allowed;
+}
+
+.showing:focus-visible,
+.seat:focus-visible,
+.reserve:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* Forklaring av setestatus */
+.legend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.9rem;
+    margin: 1.9rem 0 2.25rem;
+    font-size: 1rem;
+}
+
+.legend span:nth-child(even) {
+    margin-right: 1.5rem;
+}
+
+.legend .seat {
+    display: inline-block;
+    cursor: default;
+}
+
+
+/* Oppsummering og skjema */
+.divider {
+    height: 0.6rem;
+    margin: 0 0 1.9rem;
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--shadow-in);
+}
+
+.checkout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 1.9rem;
+}
+
+.summary {
+    display: flex;
+    justify-content: space-between;
+}
+
+.fields {
+    display: flex;
+    gap: 2rem;
+}
+
+.field {
+    flex: 1;
+}
+
+.form label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+}
+
+.form input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text);
+    box-shadow: var(--shadow-in);
+    font: inherit;
+}
+
+.form input:-webkit-autofill {
+    -webkit-text-fill-color: var(--text);
+    transition: background-color 600000s 0s;
+}
+
+.form input:focus {
+    outline: 2px solid var(--accent);
+}
+
+.reserve {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--accent);
+    box-shadow: var(--shadow-out);
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.reserve:hover {
+    color: var(--accent-hover);
+}
+
+.reserve:active {
+    box-shadow: var(--shadow-in);
+}
+
+.message {
+    margin-top: 1.5rem;
+    color: var(--error);
+    font-weight: bold;
+}
+
+/* Valgte seter og forestilling */
+.seat.selected,
+.showing.selected {
+    background: var(--selected);
+    box-shadow: var(--shadow-in);
+}
+
+@media (max-width: 480px) {
+    .page {
+        padding: 1rem;
+    }
+
+    .seat {
+        width: 28px;
+        height: 32px;
+    }
+
+    .row {
+        gap: 5px;
+    }
+
+    .fields {
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+}

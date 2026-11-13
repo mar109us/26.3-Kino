@@ -6,7 +6,6 @@ function updateView() {
             ${createShowingInfo()}
             ${createHall()}
             ${createLegend()}
-            ${createSummary()}
             ${createForm()}
             ${createMessage()}
         </div>`;
@@ -40,8 +39,10 @@ function createShowingInfo() {
    return /*HTML*/ `
       <div class="showing-info">
          <h2>${selectedShowing.title}</h2>
-         <p>${selectedShowing.time}</p>
-         <p>${selectedShowing.price} kr per billett</p>
+         <div class="showing-details">
+            <p>${selectedShowing.time}</p>
+            <p>${selectedShowing.price} kr per billett</p>
+         </div>
       </div>`;
 }
 
@@ -64,8 +65,7 @@ function createHall() {
          <div class="row"><span class="row-label">${row}</span>${seatsHtml}</div>`;
    }
    return /*HTML*/ `
-        <div class="screen"></div>
-        <div class="screen-label">LERRET</div>
+        <div class="screen">LERRET</div>
         <div class="hall">
             ${hallHtml}
         </div>`;
@@ -112,20 +112,28 @@ function getSelectedShowing() {
 function createForm() {
    return /*HTML*/ `
       <form class="form" onsubmit="event.preventDefault(); reserve()">
-         <label for="name">Navn</label>
-         <input 
-            id="name" 
-            type="text" 
-            value="${model.viewState.inputName}" 
-            oninput="model.viewState.inputName = this.value">
-         <br>
-         <label for="phone">Telefonnummer</label>
-         <input 
-            id="phone" 
-            type="tel"
-            value="${model.viewState.inputPhone}"
-            oninput="model.viewState.inputPhone = this.value">
-         <br>
+         <hr class="divider">
+         <div class="checkout">
+            ${createSummary()}
+            <div class="fields">
+               <div class="field">
+                  <label for="name">Navn</label>
+                  <input 
+                     id="name" 
+                     type="text" 
+                     value="${model.viewState.inputName}" 
+                     oninput="model.viewState.inputName = this.value">
+               </div>
+               <div class="field">
+                  <label for="phone">Telefonnummer</label>
+                  <input 
+                     id="phone" 
+                     type="tel"
+                     value="${model.viewState.inputPhone}"
+                     oninput="model.viewState.inputPhone = this.value">
+               </div>
+            </div>
+         </div>
          <button class="reserve" type="submit">Reserver</button>
       </form>`;
 }
