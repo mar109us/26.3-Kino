@@ -288,6 +288,7 @@ h1 {
     margin-top: 1.5rem;
     color: var(--error);
     font-weight: bold;
+    min-height: 1.5em;
 }
 
 /* Valgte seter og forestilling */
